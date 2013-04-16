@@ -1,0 +1,6 @@
+(($) ->
+
+  $.fn.validarCedulaEC = ->
+
+
+)(jQuery)
