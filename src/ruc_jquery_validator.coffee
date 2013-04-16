@@ -28,19 +28,66 @@
         throw new Error("Tercer dígito es inválido.")
       if tercer_digito is 9 then @tipo_de_cedula = "Sociedad privada o extranjera"
       else if tercer_digito is 6 then @tipo_de_cedula = "Sociedad pública"
-      else if tercer_digito <= 6 then @tipo_de_cedula = "Persona natural"
+      else if tercer_digito < 6 then @tipo_de_cedula = "Persona natural"
 
       productos = []
 
       # para personas naturales:
       if tercer_digito < 6
+        modulo = 10
+        verificador = parseInt(@numero.substr(9,1))
         p = 2
-        for i in @numero
+        for i in @numero.substr(0,9)
           producto = parseInt(i) * p
           if producto >= 10 then producto -= 9
           productos.push producto
           if p == 2 then p = 1 else p = 2
-      console.log productos
+
+      # para sociedades públicas:
+      if tercer_digito is 6
+        verificador = parseInt(@numero.substr(8,1))
+        modulo = 11
+        multiplicadores = [ 3, 2, 7, 6, 5, 4, 3, 2 ]
+        for i in [0..7]
+          productos[i] = parseInt(@numero[i]) * multiplicadores[i]
+        productos[8] = 0
+
+      # para entidades privadas:
+      if tercer_digito is 9
+        verificador = parseInt(@numero.substr(9,1))
+        modulo = 11
+        multiplicadores = [ 4, 3, 2, 7, 6,5, 4, 3, 2 ]
+        for i in [0..8]
+          productos[i] = parseInt(@numero[i]) * multiplicadores[i]
+
+      suma = 0
+      for i in productos
+        suma += i
+      residuo = suma % modulo
+      digito_verificador = if residuo is 0 then 0 else modulo - residuo
+
+      # sociedades públicas:
+      if tercer_digito is 6
+        if digito_verificador is verificador
+          @valid = true
+        else
+          @valid = false
+
+      # entidades privadas:
+      if tercer_digito is 9
+        if digito_verificador is verificador
+          @valid = true
+        else
+          @valid = false
+
+      # personas naturales:
+      if tercer_digito < 6
+        if digito_verificador is verificador
+          @valid = true
+        else
+          @valid = false
+      
+      
 
       this
 

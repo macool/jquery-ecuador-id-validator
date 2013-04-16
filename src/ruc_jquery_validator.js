@@ -16,7 +16,7 @@
       }
 
       RucValidatorEc.prototype.validate = function() {
-        var i, p, producto, productos, provincias, tercer_digito, _i, _len, _ref;
+        var digito_verificador, i, modulo, multiplicadores, p, producto, productos, provincias, residuo, suma, tercer_digito, verificador, _i, _j, _k, _l, _len, _len1, _ref;
 
         if (!(this.numero.length === 10 || this.numero.length === 13)) {
           this.valid = false;
@@ -35,13 +35,15 @@
           this.tipo_de_cedula = "Sociedad privada o extranjera";
         } else if (tercer_digito === 6) {
           this.tipo_de_cedula = "Sociedad pública";
-        } else if (tercer_digito <= 6) {
+        } else if (tercer_digito < 6) {
           this.tipo_de_cedula = "Persona natural";
         }
         productos = [];
         if (tercer_digito < 6) {
+          modulo = 10;
+          verificador = parseInt(this.numero.substr(9, 1));
           p = 2;
-          _ref = this.numero;
+          _ref = this.numero.substr(0, 9);
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             i = _ref[_i];
             producto = parseInt(i) * p;
@@ -56,7 +58,51 @@
             }
           }
         }
-        console.log(productos);
+        if (tercer_digito === 6) {
+          verificador = parseInt(this.numero.substr(8, 1));
+          modulo = 11;
+          multiplicadores = [3, 2, 7, 6, 5, 4, 3, 2];
+          for (i = _j = 0; _j <= 7; i = ++_j) {
+            productos[i] = parseInt(this.numero[i]) * multiplicadores[i];
+          }
+          productos[8] = 0;
+        }
+        if (tercer_digito === 9) {
+          verificador = parseInt(this.numero.substr(9, 1));
+          modulo = 11;
+          multiplicadores = [4, 3, 2, 7, 6, 5, 4, 3, 2];
+          for (i = _k = 0; _k <= 8; i = ++_k) {
+            productos[i] = parseInt(this.numero[i]) * multiplicadores[i];
+          }
+        }
+        suma = 0;
+        for (_l = 0, _len1 = productos.length; _l < _len1; _l++) {
+          i = productos[_l];
+          suma += i;
+        }
+        residuo = suma % modulo;
+        digito_verificador = residuo === 0 ? 0 : modulo - residuo;
+        if (tercer_digito === 6) {
+          if (digito_verificador === verificador) {
+            this.valid = true;
+          } else {
+            this.valid = false;
+          }
+        }
+        if (tercer_digito === 9) {
+          if (digito_verificador === verificador) {
+            this.valid = true;
+          } else {
+            this.valid = false;
+          }
+        }
+        if (tercer_digito < 6) {
+          if (digito_verificador === verificador) {
+            this.valid = true;
+          } else {
+            this.valid = false;
+          }
+        }
         return this;
       };
 
