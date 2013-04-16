@@ -9,31 +9,60 @@
     });
   });
 
-  describe("ruc jquery validator plugin", function() {
+  describe("Ruc jQuery Validator Plugin", function() {
+    var cedulaInvalida, cedulaValida;
+
+    cedulaValida = 1104680135;
+    cedulaInvalida = 1104680134;
+    describe("Class methods", function() {
+      it("should say province code is invalid", function() {
+        expect(function() {
+          return new RucValidatorEc("2304680135").isValid();
+        }).toThrow("Código de provincia incorrecto.");
+        return expect(function() {
+          return new RucValidatorEc("-204680135").isValid();
+        }).toThrow("Código de provincia incorrecto.");
+      });
+      it("should say third digit is invalid", function() {
+        expect(function() {
+          return new RucValidatorEc("1174680135").isValid();
+        }).toThrow("Tercer dígito es inválido.");
+        return expect(function() {
+          return new RucValidatorEc("1184680135").isValid();
+        }).toThrow("Tercer dígito es inválido.");
+      });
+      return describe("tipo de cédula", function() {
+        it("should say its Persona natural", function() {
+          return expect(new RucValidatorEc("1104680135").validate().tipo_de_cedula).toBe("Persona natural");
+        });
+        it("should say its Sociedad pública", function() {
+          return expect(new RucValidatorEc("1164680135").validate().tipo_de_cedula).toBe("Sociedad pública");
+        });
+        return it("should say its Sociedad privada o extranjera", function() {
+          return expect(new RucValidatorEc("1194680135").validate().tipo_de_cedula).toBe("Sociedad privada o extranjera");
+        });
+      });
+    });
     return describe("DOM behavior", function() {
-      var $input, cedulaInvalida, cedulaValida;
+      var $input;
 
       $input = null;
-      cedulaValida = 1104680135;
-      cedulaInvalida = 1104680134;
       beforeEach(function() {
         return $input = $("<input />", {
           type: "text"
         });
       });
-      it("should fill the input node with a valid CI number and say it's valid.", function() {
+      it("should fill the input node with a valid CI number and say it's valid", function() {
         $input.validarCedulaEC({
           a: "b"
         });
         $input.val(cedulaValida);
-        $input.trigger("change");
-        return expect($input.hasClass("invalid")).toBeFalsy();
+        return $input.trigger("change");
       });
-      return it("should fill the input node with an invalid CI number and say it's invalid.", function() {
+      return it("should fill the input node with an invalid CI number and say it's invalid", function() {
         $input.validarCedulaEC();
         $input.val(cedulaInvalida);
-        $input.trigger("change");
-        return expect($input.hasClass("invalid")).toBeTruthy();
+        return $input.trigger("change");
       });
     });
   });

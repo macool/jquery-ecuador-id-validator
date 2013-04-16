@@ -3,42 +3,103 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   (function($) {
-    var RucValidatorEc;
+    var RucValidatorEc, jQueryRucValidatorEc;
 
     RucValidatorEc = (function() {
-      function RucValidatorEc($node, options) {
-        this.$node = $node;
-        this.options = options;
-        this.validateContent = __bind(this.validateContent, this);
-        this.$node.on("change", this.validateContent);
+      function RucValidatorEc(numero) {
+        this.numero = numero;
+        this.numero = this.numero.toString();
+        this.valid = false;
+        this.codigo_provincia = null;
+        this.tipo_de_cedula = null;
+        this.already_validated = false;
       }
 
-      RucValidatorEc.prototype.validateCI = function(ci) {};
+      RucValidatorEc.prototype.validate = function() {
+        var i, p, producto, productos, provincias, tercer_digito, _i, _len, _ref;
 
-      RucValidatorEc.prototype.validateContent = function() {
-        var length, value;
-
-        console.log(this.$node);
-        value = this.$node.val().toString();
-        length = value.length;
-        if (length === 10 || length === 13) {
-          return console.log("length ok.");
-        } else {
-          return console.log("length not ok.");
+        if (!(this.numero.length === 10 || this.numero.length === 13)) {
+          this.valid = false;
         }
+        provincias = 22;
+        this.codigo_provincia = parseInt(this.numero.substr(0, 2));
+        if (this.codigo_provincia < 1 || this.codigo_provincia > provincias) {
+          this.valid = false;
+          throw new Error("Código de provincia incorrecto.");
+        }
+        tercer_digito = parseInt(this.numero[2]);
+        if (tercer_digito === 7 || tercer_digito === 8) {
+          throw new Error("Tercer dígito es inválido.");
+        }
+        if (tercer_digito === 9) {
+          this.tipo_de_cedula = "Sociedad privada o extranjera";
+        } else if (tercer_digito === 6) {
+          this.tipo_de_cedula = "Sociedad pública";
+        } else if (tercer_digito <= 6) {
+          this.tipo_de_cedula = "Persona natural";
+        }
+        productos = [];
+        if (tercer_digito < 6) {
+          p = 2;
+          _ref = this.numero;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            producto = parseInt(i) * p;
+            if (producto >= 10) {
+              producto -= 9;
+            }
+            productos.push(producto);
+            if (p === 2) {
+              p = 1;
+            } else {
+              p = 2;
+            }
+          }
+        }
+        console.log(productos);
+        return this;
+      };
+
+      RucValidatorEc.prototype.isValid = function() {
+        if (!this.already_validated) {
+          this.validate();
+        }
+        return this.valid;
       };
 
       return RucValidatorEc;
 
     })();
+    window.RucValidatorEc = RucValidatorEc;
+    jQueryRucValidatorEc = (function() {
+      function jQueryRucValidatorEc($node, options) {
+        this.$node = $node;
+        this.options = options;
+        this.validateContent = __bind(this.validateContent, this);
+        this.$node.on(this.options.events, this.validateContent);
+      }
+
+      jQueryRucValidatorEc.prototype.validateContent = function() {
+        if (new RucValidatorEc(this.$node.val().toString()).isValid()) {
+          console.log("valid.");
+        } else {
+          this.$node.addClass("invalid");
+        }
+        return null;
+      };
+
+      return jQueryRucValidatorEc;
+
+    })();
     $.fn.validarCedulaEC = function(options) {
       options = $.extend({}, $.fn.validarCedulaEC.defaults, options);
       this.each(function() {
-        return new RucValidatorEc($(this), options);
+        return new jQueryRucValidatorEc($(this), options);
       });
       return this;
     };
     return $.fn.validarCedulaEC.defaults = {
+      events: "change",
       onValid: function() {
         return null;
       },
