@@ -9,7 +9,7 @@
     });
   });
 
-  describe("Ruc jQuery Validator Plugin", function() {
+  describe("RUC jQuery Validator Plugin", function() {
     var cedulaInvalida, cedulaValida;
 
     cedulaValida = 1104680135;
@@ -23,7 +23,7 @@
           return new RucValidatorEc("-204680135").isValid();
         }).toThrow("Código de provincia incorrecto.");
       });
-      it("should say third digit is invalid", function() {
+      it("should say third digit is invalid as 7 and 8 are not allowed", function() {
         expect(function() {
           return new RucValidatorEc("1174680135").isValid();
         }).toThrow("Tercer dígito es inválido.");
@@ -31,15 +31,37 @@
           return new RucValidatorEc("1184680135").isValid();
         }).toThrow("Tercer dígito es inválido.");
       });
-      return describe("tipo de cédula", function() {
+      describe("tipo de cédula", function() {
         it("should say its Persona natural", function() {
           return expect(new RucValidatorEc("1104680135").validate().tipo_de_cedula).toBe("Persona natural");
         });
         it("should say its Sociedad pública", function() {
-          return expect(new RucValidatorEc("1164680135").validate().tipo_de_cedula).toBe("Sociedad pública");
+          return expect(new RucValidatorEc("1164680130001").validate().tipo_de_cedula).toBe("Sociedad pública");
         });
         return it("should say its Sociedad privada o extranjera", function() {
-          return expect(new RucValidatorEc("1194680135").validate().tipo_de_cedula).toBe("Sociedad privada o extranjera");
+          return expect(new RucValidatorEc("1194680135001").validate().tipo_de_cedula).toBe("Sociedad privada o extranjera");
+        });
+      });
+      return describe("con cédulas", function() {
+        it("should say cedula is valid", function() {
+          return expect(new RucValidatorEc(cedulaValida).validate().isValid()).toBeTruthy();
+        });
+        it("should say cedula is invalid", function() {
+          return expect(new RucValidatorEc(cedulaInvalida).validate().isValid()).toBeFalsy();
+        });
+        it("should validate @calu 's CI", function() {
+          return expect(new RucValidatorEc("1102778014").isValid()).toBeTruthy;
+        });
+        return it("testing some friend's CIs", function() {
+          var ci, validCIs, _i, _len, _results;
+
+          validCIs = ["1104077209", "1102077425", "1102019351"];
+          _results = [];
+          for (_i = 0, _len = validCIs.length; _i < _len; _i++) {
+            ci = validCIs[_i];
+            _results.push(expect(new RucValidatorEc(ci).isValid()).toBeTruthy);
+          }
+          return _results;
         });
       });
     });
@@ -53,16 +75,39 @@
         });
       });
       it("should fill the input node with a valid CI number and say it's valid", function() {
-        $input.validarCedulaEC({
-          a: "b"
-        });
+        $input.validarCedulaEC();
         $input.val(cedulaValida);
-        return $input.trigger("change");
+        $input.trigger("change");
+        return expect($input.hasClass("invalid")).toBeFalsy();
       });
-      return it("should fill the input node with an invalid CI number and say it's invalid", function() {
+      it("should fill the input node with an invalid CI number and say it's invalid", function() {
         $input.validarCedulaEC();
         $input.val(cedulaInvalida);
-        return $input.trigger("change");
+        $input.trigger("change");
+        return expect($input.hasClass("invalid")).toBeTruthy();
+      });
+      return describe("callbacks", function() {
+        var fn;
+
+        fn = function() {
+          return window.a = "macool";
+        };
+        it("should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", function() {
+          $input.validarCedulaEC({
+            onValid: fn
+          });
+          $input.val(cedulaValida);
+          $input.trigger("change");
+          return expect(window.a).toBe("macool");
+        });
+        return it("should the same as last, but with an invalid CI", function() {
+          $input.validarCedulaEC({
+            onInvalid: fn
+          });
+          $input.val(cedulaInvalida);
+          $input.trigger("change");
+          return expect(window.a).toBe("macool");
+        });
       });
     });
   });

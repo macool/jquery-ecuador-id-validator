@@ -8,7 +8,7 @@ describe "load dependences", ->
 
 
 
-describe "Ruc jQuery Validator Plugin", ->
+describe "RUC jQuery Validator Plugin", ->
 
   cedulaValida = 1104680135
   cedulaInvalida = 1104680134
@@ -23,7 +23,7 @@ describe "Ruc jQuery Validator Plugin", ->
         new RucValidatorEc("-204680135").isValid()
       .toThrow("Código de provincia incorrecto.")
 
-    it "should say third digit is invalid", ->
+    it "should say third digit is invalid as 7 and 8 are not allowed", ->
       expect ->
         new RucValidatorEc("1174680135").isValid()
       .toThrow("Tercer dígito es inválido.")
@@ -37,10 +37,30 @@ describe "Ruc jQuery Validator Plugin", ->
         expect(new RucValidatorEc("1104680135").validate().tipo_de_cedula).toBe("Persona natural")
 
       it "should say its Sociedad pública", ->
-        expect(new RucValidatorEc("1164680135").validate().tipo_de_cedula).toBe("Sociedad pública")
+        expect(new RucValidatorEc("1164680130001").validate().tipo_de_cedula).toBe("Sociedad pública")
 
       it "should say its Sociedad privada o extranjera", ->
-        expect(new RucValidatorEc("1194680135").validate().tipo_de_cedula).toBe("Sociedad privada o extranjera")
+        expect(new RucValidatorEc("1194680135001").validate().tipo_de_cedula).toBe("Sociedad privada o extranjera")
+
+    describe "con cédulas", ->
+
+      it "should say cedula is valid", ->
+        expect(new RucValidatorEc(cedulaValida).validate().isValid()).toBeTruthy()
+
+      it "should say cedula is invalid", ->
+        expect(new RucValidatorEc(cedulaInvalida).validate().isValid()).toBeFalsy()
+
+      it "should validate @calu 's CI", ->
+        expect(new RucValidatorEc("1102778014").isValid()).toBeTruthy
+
+      it "testing some friend's CIs", ->
+        validCIs = [
+          "1104077209",
+          "1102077425",
+          "1102019351"
+        ]
+        for ci in validCIs
+          expect(new RucValidatorEc(ci).isValid()).toBeTruthy
 
 
 
@@ -52,14 +72,31 @@ describe "Ruc jQuery Validator Plugin", ->
       $input = $("<input />", {type: "text"})
 
     it "should fill the input node with a valid CI number and say it's valid", ->
-      $input.validarCedulaEC( {a:"b"} )
+      $input.validarCedulaEC()
       $input.val cedulaValida
       $input.trigger "change"
-      # expect($input.hasClass("invalid")).toBeFalsy()
+      expect($input.hasClass("invalid")).toBeFalsy()
 
     it "should fill the input node with an invalid CI number and say it's invalid", ->
       $input.validarCedulaEC()
       $input.val cedulaInvalida
       $input.trigger "change"
-      # expect($input.hasClass("invalid")).toBeTruthy()
+      expect($input.hasClass("invalid")).toBeTruthy()
+
+    describe "callbacks", ->
+
+      fn = ->
+        window.a = "macool"
+
+      it "should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", ->
+        $input.validarCedulaEC({ onValid: fn })
+        $input.val cedulaValida
+        $input.trigger "change"
+        expect(window.a).toBe("macool")
+
+      it "should the same as last, but with an invalid CI", ->
+        $input.validarCedulaEC({ onInvalid: fn })
+        $input.val cedulaInvalida
+        $input.trigger "change"
+        expect(window.a).toBe("macool")
 

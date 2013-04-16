@@ -83,6 +83,9 @@
         residuo = suma % modulo;
         digito_verificador = residuo === 0 ? 0 : modulo - residuo;
         if (tercer_digito === 6) {
+          if (this.numero.substr(9, 4) !== "0001") {
+            throw new Error("RUC de empresa del sector público debe terminar en 0001");
+          }
           if (digito_verificador === verificador) {
             this.valid = true;
           } else {
@@ -90,6 +93,9 @@
           }
         }
         if (tercer_digito === 9) {
+          if (this.numero.substr(10, 3) !== "001") {
+            throw new Error("RUC de entidad privada debe terminar en 001");
+          }
           if (digito_verificador === verificador) {
             this.valid = true;
           } else {
@@ -97,6 +103,9 @@
           }
         }
         if (tercer_digito < 6) {
+          if (this.numero.length > 10 && this.numero.substr(10, 3) !== "001") {
+            throw new Error("RUC de persona natural debe terminar en 001");
+          }
           if (digito_verificador === verificador) {
             this.valid = true;
           } else {
@@ -122,14 +131,16 @@
         this.$node = $node;
         this.options = options;
         this.validateContent = __bind(this.validateContent, this);
+        this.options = $.extend({}, $.fn.validarCedulaEC.defaults, this.options);
         this.$node.on(this.options.events, this.validateContent);
       }
 
       jQueryRucValidatorEc.prototype.validateContent = function() {
         if (new RucValidatorEc(this.$node.val().toString()).isValid()) {
-          console.log("valid.");
+          this.options.onValid();
         } else {
           this.$node.addClass("invalid");
+          this.options.onInvalid();
         }
         return null;
       };
@@ -138,7 +149,6 @@
 
     })();
     $.fn.validarCedulaEC = function(options) {
-      options = $.extend({}, $.fn.validarCedulaEC.defaults, options);
       this.each(function() {
         return new jQueryRucValidatorEc($(this), options);
       });

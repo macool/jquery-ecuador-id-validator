@@ -68,6 +68,8 @@
 
       # sociedades públicas:
       if tercer_digito is 6
+        if @numero.substr(9,4) isnt "0001"
+          throw new Error("RUC de empresa del sector público debe terminar en 0001")
         if digito_verificador is verificador
           @valid = true
         else
@@ -75,6 +77,8 @@
 
       # entidades privadas:
       if tercer_digito is 9
+        if @numero.substr(10,3) isnt "001"
+          throw new Error("RUC de entidad privada debe terminar en 001")
         if digito_verificador is verificador
           @valid = true
         else
@@ -82,13 +86,12 @@
 
       # personas naturales:
       if tercer_digito < 6
+        if @numero.length > 10 and @numero.substr(10,3) isnt "001"
+          throw new Error("RUC de persona natural debe terminar en 001")
         if digito_verificador is verificador
           @valid = true
         else
           @valid = false
-      
-      
-
       this
 
     isValid: ->
@@ -99,20 +102,21 @@
 
   class jQueryRucValidatorEc
     constructor: ( @$node, @options ) ->
+      @options = $.extend({}, $.fn.validarCedulaEC.defaults, @options)
       @$node.on @options.events, @validateContent
 
     validateContent: =>
       if new RucValidatorEc(@$node.val().toString()).isValid()
-        console.log "valid."
+        @options.onValid()
       else
         @$node.addClass("invalid")
+        @options.onInvalid()
       null
 
       
       
 
   $.fn.validarCedulaEC = ( options ) ->
-    options = $.extend({}, $.fn.validarCedulaEC.defaults, options)
     this.each ->
       new jQueryRucValidatorEc( $(this), options )
     this
