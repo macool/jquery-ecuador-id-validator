@@ -11,15 +11,30 @@
 
   describe("ruc jquery validator plugin", function() {
     return describe("DOM behavior", function() {
-      var $input;
+      var $input, cedulaInvalida, cedulaValida;
 
       $input = null;
+      cedulaValida = 1104680135;
+      cedulaInvalida = 1104680134;
       beforeEach(function() {
-        return $input = $("input", {
+        return $input = $("<input />", {
           type: "text"
         });
       });
-      return it("should create an input node, fill it with a valid RUC number and apply the method");
+      it("should fill the input node with a valid CI number and say it's valid.", function() {
+        $input.validarCedulaEC({
+          a: "b"
+        });
+        $input.val(cedulaValida);
+        $input.trigger("change");
+        return expect($input.hasClass("invalid")).toBeFalsy();
+      });
+      return it("should fill the input node with an invalid CI number and say it's invalid.", function() {
+        $input.validarCedulaEC();
+        $input.val(cedulaInvalida);
+        $input.trigger("change");
+        return expect($input.hasClass("invalid")).toBeTruthy();
+      });
     });
   });
 

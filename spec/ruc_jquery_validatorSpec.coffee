@@ -13,9 +13,21 @@ describe "ruc jquery validator plugin", ->
   describe "DOM behavior", ->
 
     $input = null
+    cedulaValida = 1104680135
+    cedulaInvalida = 1104680134
 
     beforeEach ->
-      $input = $("input", {type: "text"})
+      $input = $("<input />", {type: "text"})
 
-    it "should create an input node, fill it with a valid RUC number and apply the method"
+    it "should fill the input node with a valid CI number and say it's valid.", ->
+      $input.validarCedulaEC( {a:"b"} )
+      $input.val cedulaValida
+      $input.trigger "change"
+      expect($input.hasClass("invalid")).toBeFalsy()
+
+    it "should fill the input node with an invalid CI number and say it's invalid.", ->
+      $input.validarCedulaEC()
+      $input.val cedulaInvalida
+      $input.trigger "change"
+      expect($input.hasClass("invalid")).toBeTruthy()
 
