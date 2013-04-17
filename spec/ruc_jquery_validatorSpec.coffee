@@ -14,7 +14,7 @@ describe "RUC jQuery Validator Plugin", ->
   cedulaInvalida = 1104680134
 
   describe "Class methods", ->
-    
+
     it "should say province code is invalid", ->
       expect ->
         new RucValidatorEc("2304680135").isValid()
@@ -71,75 +71,80 @@ describe "RUC jQuery Validator Plugin", ->
     beforeEach ->
       $input = $("<input />", {type: "text"})
 
-    it "should fill the input node with a valid CI number and say it's valid", ->
+    it "should say it's valid when the input's CI is valid", ->
       $input.validarCedulaEC()
-      $input.val cedulaValida
-      $input.trigger "change"
-      expect($input.hasClass("invalid")).toBeFalsy
+      $input.val(cedulaValida).trigger("change")
+      expect($input).not.toHaveClass("invalid")
 
-    it "should fill the input node with an invalid CI number and say it's invalid", ->
+    it "should say it's invalid when the input's CI is invalid", ->
       $input.validarCedulaEC()
-      $input.val cedulaInvalida
-      $input.trigger "change"
-      expect($input.hasClass("invalid")).toBeTruthy
+      $input.val(cedulaInvalida).trigger("change")
+      expect($input).toHaveClass("invalid")
+
+    it "should say it's invalid when the input's CI is too short", ->
+      $input.validarCedulaEC()
+      $input.val("1234").trigger("change")
+      expect($input).toHaveClass("invalid")
+
+    it "should say it's invalid when the input's CI is 11 characters long", ->
+      $input.validarCedulaEC()
+      $input.val(cedulaValida.toString() + "1").trigger("change")
+      expect($input).toHaveClass("invalid")
+
+    it "should say it's invalid when the input's CI is 14 characters long", ->
+      $input.validarCedulaEC()
+      $input.val(cedulaValida.toString() + "0012").trigger("change")
+      expect($input).toHaveClass("invalid")
 
     describe "options", ->
 
       it "should validate always because strict is enabled by default", ->
         $input.validarCedulaEC()
-        $input.val "1"
-        $input.trigger "change"
-        expect($input.hasClass("invalid")).toBeTruthy
+        $input.val("1").trigger("change")
+        expect($input).toHaveClass("invalid")
 
       it "should not validate because strict is disabled", ->
         $input.validarCedulaEC({ strict: false })
-        $input.val "110468013"
-        $input.trigger "change"
-        expect($input.hasClass("invalid")).toBeFalsy
+        $input.val("110468013").trigger("change")
+        expect($input).not.toHaveClass("invalid")
 
       it "should add a class of no-valid if specified", ->
         $input.validarCedulaEC({ the_classes: "no-valid" })
-        $input.val cedulaInvalida
-        $input.trigger "change"
-        expect($input.hasClass("no-valid")).toBeTruthy
+        $input.val(cedulaInvalida).trigger("change")
+        expect($input).toHaveClass("no-valid")
 
       it "should listen for an event of blur instead of change", ->
         $input.validarCedulaEC({ events: "blur" })
-        $input.val cedulaInvalida
-        $input.trigger "change"
-        expect($input.hasClass("invalid")).toBeFalsy
+        $input.val(cedulaInvalida).trigger("change")
+        expect($input).not.toHaveClass("invalid")
         $input.trigger "blur"
-        expect($input.hasClass("invalid")).toBeTruthy
+        expect($input).toHaveClass("invalid")
 
     describe "callbacks", ->
+      callback_return = null
 
-      callback_fn = ->
-        window.a = "macool"
+      beforeEach ->
+        @callback_fn = ->
+          callback_return = @
 
-      callback_fn_2 = ->
-        window.last_node = this
+        spyOn(@, "callback_fn").andCallThrough()
 
-      it "should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", ->
-        $input.validarCedulaEC({ onValid: callback_fn })
-        $input.val cedulaValida
-        $input.trigger "change"
-        expect(window.a).toBe "macool"
+      it "should fire a callback when CI is valid", ->
+        $input.validarCedulaEC({ onValid: @callback_fn })
+        $input.val(cedulaValida).trigger("change")
+        expect(@callback_fn).toHaveBeenCalled
 
-      it "should the same as last, but with an invalid CI", ->
-        $input.validarCedulaEC({ onInvalid: callback_fn })
-        $input.val cedulaInvalida
-        $input.trigger "change"
-        expect(window.a).toBe "macool"
+      it "should fire a callback when CI is invalid", ->
+        $input.validarCedulaEC({ onInvalid: @callback_fn })
+        $input.val(cedulaInvalida).trigger("change")
+        expect(@callback_fn).toHaveBeenCalled
 
       it "should bind the jQuery object to the valid callback fn", ->
-        $input.validarCedulaEC({ onValid: callback_fn_2 })
-        $input.val cedulaValida
-        $input.trigger "change"
-        expect(window.last_node[0]).toBe $input[0]
+        $input.validarCedulaEC({ onValid: @callback_fn })
+        $input.val(cedulaValida).trigger("change")
+        expect(callback_return[0]).toBe $input[0]
 
       it "should bind the jQuery object to the invalid callback fn", ->
-        $input.validarCedulaEC({ onInvalid: callback_fn_2 })
-        $input.val cedulaInvalida
-        $input.trigger "change"
-        expect(window.last_node[0]).toBe $input[0]
-
+        $input.validarCedulaEC({ onInvalid: @callback_fn })
+        $input.val(cedulaInvalida).trigger("change")
+        expect(callback_return[0]).toBe $input[0]

@@ -20,14 +20,15 @@
 
         if (!(this.numero.length === 10 || this.numero.length === 13)) {
           this.valid = false;
+          throw new Error("Longitud incorrecta.");
         }
         provincias = 22;
-        this.codigo_provincia = parseInt(this.numero.substr(0, 2));
+        this.codigo_provincia = parseInt(this.numero.substr(0, 2), 10);
         if (this.codigo_provincia < 1 || this.codigo_provincia > provincias) {
           this.valid = false;
           throw new Error("Código de provincia incorrecto.");
         }
-        tercer_digito = parseInt(this.numero[2]);
+        tercer_digito = parseInt(this.numero[2], 10);
         if (tercer_digito === 7 || tercer_digito === 8) {
           throw new Error("Tercer dígito es inválido.");
         }
@@ -41,12 +42,12 @@
         productos = [];
         if (tercer_digito < 6) {
           modulo = 10;
-          verificador = parseInt(this.numero.substr(9, 1));
+          verificador = parseInt(this.numero.substr(9, 1), 10);
           p = 2;
           _ref = this.numero.substr(0, 9);
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             i = _ref[_i];
-            producto = parseInt(i) * p;
+            producto = parseInt(i, 10) * p;
             if (producto >= 10) {
               producto -= 9;
             }
@@ -59,20 +60,20 @@
           }
         }
         if (tercer_digito === 6) {
-          verificador = parseInt(this.numero.substr(8, 1));
+          verificador = parseInt(this.numero.substr(8, 1), 10);
           modulo = 11;
           multiplicadores = [3, 2, 7, 6, 5, 4, 3, 2];
           for (i = _j = 0; _j <= 7; i = ++_j) {
-            productos[i] = parseInt(this.numero[i]) * multiplicadores[i];
+            productos[i] = parseInt(this.numero[i], 10) * multiplicadores[i];
           }
           productos[8] = 0;
         }
         if (tercer_digito === 9) {
-          verificador = parseInt(this.numero.substr(9, 1));
+          verificador = parseInt(this.numero.substr(9, 1), 10);
           modulo = 11;
           multiplicadores = [4, 3, 2, 7, 6, 5, 4, 3, 2];
           for (i = _k = 0; _k <= 8; i = ++_k) {
-            productos[i] = parseInt(this.numero[i]) * multiplicadores[i];
+            productos[i] = parseInt(this.numero[i], 10) * multiplicadores[i];
           }
         }
         suma = 0;
@@ -86,31 +87,19 @@
           if (this.numero.substr(9, 4) !== "0001") {
             throw new Error("RUC de empresa del sector público debe terminar en 0001");
           }
-          if (digito_verificador === verificador) {
-            this.valid = true;
-          } else {
-            this.valid = false;
-          }
+          this.valid = digito_verificador === verificador;
         }
         if (tercer_digito === 9) {
           if (this.numero.substr(10, 3) !== "001") {
             throw new Error("RUC de entidad privada debe terminar en 001");
           }
-          if (digito_verificador === verificador) {
-            this.valid = true;
-          } else {
-            this.valid = false;
-          }
+          this.valid = digito_verificador === verificador;
         }
         if (tercer_digito < 6) {
           if (this.numero.length > 10 && this.numero.substr(10, 3) !== "001") {
             throw new Error("RUC de persona natural debe terminar en 001");
           }
-          if (digito_verificador === verificador) {
-            this.valid = true;
-          } else {
-            this.valid = false;
-          }
+          this.valid = digito_verificador === verificador;
         }
         return this;
       };
@@ -136,7 +125,7 @@
       }
 
       jQueryRucValidatorEc.prototype.validateContent = function() {
-        var check, numero_de_cedula;
+        var check, error, numero_de_cedula;
 
         numero_de_cedula = this.$node.val().toString();
         check = this.options.strict;
@@ -144,10 +133,16 @@
           check = true;
         }
         if (check) {
-          if (new RucValidatorEc(numero_de_cedula).isValid()) {
-            this.$node.removeClass(this.options.the_classes);
-            this.options.onValid.call(this.$node);
-          } else {
+          try {
+            if (new RucValidatorEc(numero_de_cedula).isValid()) {
+              this.$node.removeClass(this.options.the_classes);
+              this.options.onValid.call(this.$node);
+            } else {
+              this.$node.addClass(this.options.the_classes);
+              this.options.onInvalid.call(this.$node);
+            }
+          } catch (_error) {
+            error = _error;
             this.$node.addClass(this.options.the_classes);
             this.options.onInvalid.call(this.$node);
           }
