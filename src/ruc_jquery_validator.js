@@ -22,12 +22,12 @@
           this.valid = false;
         }
         provincias = 22;
-        this.codigo_provincia = parseInt(this.numero.substr(0, 2));
+        this.codigo_provincia = parseInt(this.numero.substr(0, 2), 10);
         if (this.codigo_provincia < 1 || this.codigo_provincia > provincias) {
           this.valid = false;
           throw new Error("Código de provincia incorrecto.");
         }
-        tercer_digito = parseInt(this.numero[2]);
+        tercer_digito = parseInt(this.numero[2], 10);
         if (tercer_digito === 7 || tercer_digito === 8) {
           throw new Error("Tercer dígito es inválido.");
         }
@@ -41,12 +41,12 @@
         productos = [];
         if (tercer_digito < 6) {
           modulo = 10;
-          verificador = parseInt(this.numero.substr(9, 1));
+          verificador = parseInt(this.numero.substr(9, 1), 10);
           p = 2;
           _ref = this.numero.substr(0, 9);
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             i = _ref[_i];
-            producto = parseInt(i) * p;
+            producto = parseInt(i, 10) * p;
             if (producto >= 10) {
               producto -= 9;
             }
@@ -59,20 +59,20 @@
           }
         }
         if (tercer_digito === 6) {
-          verificador = parseInt(this.numero.substr(8, 1));
+          verificador = parseInt(this.numero.substr(8, 1), 10);
           modulo = 11;
           multiplicadores = [3, 2, 7, 6, 5, 4, 3, 2];
           for (i = _j = 0; _j <= 7; i = ++_j) {
-            productos[i] = parseInt(this.numero[i]) * multiplicadores[i];
+            productos[i] = parseInt(this.numero[i], 10) * multiplicadores[i];
           }
           productos[8] = 0;
         }
         if (tercer_digito === 9) {
-          verificador = parseInt(this.numero.substr(9, 1));
+          verificador = parseInt(this.numero.substr(9, 1), 10);
           modulo = 11;
           multiplicadores = [4, 3, 2, 7, 6, 5, 4, 3, 2];
           for (i = _k = 0; _k <= 8; i = ++_k) {
-            productos[i] = parseInt(this.numero[i]) * multiplicadores[i];
+            productos[i] = parseInt(this.numero[i], 10) * multiplicadores[i];
           }
         }
         suma = 0;

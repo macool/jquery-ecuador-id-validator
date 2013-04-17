@@ -14,7 +14,7 @@
 
       # código de provincia:
       provincias = 22
-      @codigo_provincia = parseInt @numero.substr(0,2)
+      @codigo_provincia = parseInt(@numero.substr(0,2), 10)
       if @codigo_provincia < 1 or @codigo_provincia > provincias
         @valid = false
         throw new Error("Código de provincia incorrecto.")
@@ -23,7 +23,7 @@
       #     9    -> sociedades privadas o extranjeras
       #     6    -> sociedades publicas
       #     0..6 -> personas naturales
-      tercer_digito = parseInt @numero[2]
+      tercer_digito = parseInt(@numero[2], 10)
       if tercer_digito is 7 or tercer_digito is 8
         throw new Error("Tercer dígito es inválido.")
       if tercer_digito is 9 then @tipo_de_cedula = "Sociedad privada o extranjera"
@@ -35,30 +35,30 @@
       # para personas naturales:
       if tercer_digito < 6
         modulo = 10
-        verificador = parseInt(@numero.substr(9,1))
+        verificador = parseInt(@numero.substr(9,1), 10)
         p = 2
         for i in @numero.substr(0,9)
-          producto = parseInt(i) * p
+          producto = parseInt(i, 10) * p
           if producto >= 10 then producto -= 9
           productos.push producto
           if p == 2 then p = 1 else p = 2
 
       # para sociedades públicas:
       if tercer_digito is 6
-        verificador = parseInt(@numero.substr(8,1))
+        verificador = parseInt(@numero.substr(8,1), 10)
         modulo = 11
         multiplicadores = [ 3, 2, 7, 6, 5, 4, 3, 2 ]
         for i in [0..7]
-          productos[i] = parseInt(@numero[i]) * multiplicadores[i]
+          productos[i] = parseInt(@numero[i], 10) * multiplicadores[i]
         productos[8] = 0
 
       # para entidades privadas:
       if tercer_digito is 9
-        verificador = parseInt(@numero.substr(9,1))
+        verificador = parseInt(@numero.substr(9,1), 10)
         modulo = 11
         multiplicadores = [ 4, 3, 2, 7, 6,5, 4, 3, 2 ]
         for i in [0..8]
-          productos[i] = parseInt(@numero[i]) * multiplicadores[i]
+          productos[i] = parseInt(@numero[i], 10) * multiplicadores[i]
 
       suma = 0
       for i in productos
@@ -119,8 +119,8 @@
           @options.onInvalid.call @$node
       null
 
-      
-      
+
+
 
   $.fn.validarCedulaEC = ( options ) ->
     this.each ->
@@ -136,6 +136,6 @@
     onInvalid: ->
       null
 
-  
+
 
 )(jQuery)
