@@ -7,7 +7,7 @@ plugin para jQuery para validar la cédula o RUC de Ecuador.
 ## Cómo usar
 
 1. jQuery `<script src='jquery.js'></script>`
-2. librería JavaScript: `<script src='src/ruc_jquery_validator.js'></script>`
+2. librería JavaScript: `<script src='dist/ruc_jquery_validator.min.js'></script>`
 3. seleccionar un input y aplicar el plugin:
 
 ```javascript

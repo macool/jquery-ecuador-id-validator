@@ -34,21 +34,26 @@ describe "RUC jQuery Validator Plugin", ->
     describe "tipo de cédula", ->
 
       it "should say its Persona natural", ->
-        expect(new RucValidatorEc("1104680135").validate().tipo_de_cedula).toBe("Persona natural")
+        expect(new RucValidatorEc("1104680135").validate().tipo_de_cedula)
+          .toBe("Persona natural")
 
       it "should say its Sociedad pública", ->
-        expect(new RucValidatorEc("1164680130001").validate().tipo_de_cedula).toBe("Sociedad pública")
+        expect(new RucValidatorEc("1164680130001").validate().tipo_de_cedula)
+          .toBe("Sociedad pública")
 
       it "should say its Sociedad privada o extranjera", ->
-        expect(new RucValidatorEc("1194680135001").validate().tipo_de_cedula).toBe("Sociedad privada o extranjera")
+        expect(new RucValidatorEc("1194680135001").validate().tipo_de_cedula)
+          .toBe("Sociedad privada o extranjera")
 
     describe "con cédulas", ->
 
       it "should say cedula is valid", ->
-        expect(new RucValidatorEc(cedulaValida).validate().isValid()).toBeTruthy()
+        expect(new RucValidatorEc(cedulaValida).validate().isValid())
+          .toBeTruthy
 
       it "should say cedula is invalid", ->
-        expect(new RucValidatorEc(cedulaInvalida).validate().isValid()).toBeFalsy()
+        expect(new RucValidatorEc(cedulaInvalida).validate().isValid())
+          .toBeFalsy
 
       it "should validate @calu 's CI", ->
         expect(new RucValidatorEc("1102778014").isValid()).toBeTruthy

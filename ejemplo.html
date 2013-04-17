@@ -4,7 +4,7 @@
   <title>ruc_jquery_validator.js</title>
   <meta charset="utf-8" />
   <!-- jquery --><script type="text/javascript" src="lib/jquery-1.9.1/jquery-1.9.1.js"></script>
-  <!-- validator --><script type="text/javascript" src="src/ruc_jquery_validator.js"></script>
+  <!-- validator --><script type="text/javascript" src="dist/ruc_jquery_validator.min.js"></script>
   <link rel="stylesheet" type="text/css" href="ejemplo.css">
 </head>
 <body>
@@ -46,7 +46,7 @@ $("#cedula_1").validarCedulaEC();
     <input type="text" id="cedula_2" name="cedula_2">
 
     <code>
-$("#cedula_2").validarCedulaEC({ 
+$("#cedula_2").validarCedulaEC({
   the_classes: "color_blue",
   events: "blur"
 });
