@@ -75,13 +75,29 @@ describe "RUC jQuery Validator Plugin", ->
       $input.validarCedulaEC()
       $input.val cedulaValida
       $input.trigger "change"
-      expect($input.hasClass("invalid")).toBeFalsy()
+      expect($input.hasClass("invalid")).toBeFalsy
 
     it "should fill the input node with an invalid CI number and say it's invalid", ->
       $input.validarCedulaEC()
       $input.val cedulaInvalida
       $input.trigger "change"
-      expect($input.hasClass("invalid")).toBeTruthy()
+      expect($input.hasClass("invalid")).toBeTruthy
+
+    describe "options", ->
+
+      it "should add a class of no-valid if specified", ->
+        $input.validarCedulaEC({ the_classes: "no-valid" })
+        $input.val cedulaInvalida
+        $input.trigger "change"
+        expect($input.hasClass("no-valid")).toBeTruthy
+
+      it "should listen for an event of blur instead of change", ->
+        $input.validarCedulaEC({ events: "blur" })
+        $input.val cedulaInvalida
+        $input.trigger "change"
+        expect($input.hasClass("invalid")).toBeFalsy
+        $input.trigger "blur"
+        expect($input.hasClass("invalid")).toBeTruthy
 
     describe "callbacks", ->
 

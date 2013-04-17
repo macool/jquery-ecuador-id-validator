@@ -139,7 +139,7 @@
         if (new RucValidatorEc(this.$node.val().toString()).isValid()) {
           this.options.onValid();
         } else {
-          this.$node.addClass("invalid");
+          this.$node.addClass(this.options.the_class);
           this.options.onInvalid();
         }
         return null;
@@ -156,6 +156,7 @@
     };
     return $.fn.validarCedulaEC.defaults = {
       events: "change",
+      the_classes: "invalid",
       onValid: function() {
         return null;
       },

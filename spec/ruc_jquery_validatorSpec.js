@@ -78,13 +78,33 @@
         $input.validarCedulaEC();
         $input.val(cedulaValida);
         $input.trigger("change");
-        return expect($input.hasClass("invalid")).toBeFalsy();
+        return expect($input.hasClass("invalid")).toBeFalsy;
       });
       it("should fill the input node with an invalid CI number and say it's invalid", function() {
         $input.validarCedulaEC();
         $input.val(cedulaInvalida);
         $input.trigger("change");
-        return expect($input.hasClass("invalid")).toBeTruthy();
+        return expect($input.hasClass("invalid")).toBeTruthy;
+      });
+      describe("options", function() {
+        it("should add a class of no-valid if specified", function() {
+          $input.validarCedulaEC({
+            the_classes: "no-valid"
+          });
+          $input.val(cedulaInvalida);
+          $input.trigger("change");
+          return expect($input.hasClass("no-valid")).toBeTruthy;
+        });
+        return it("should listen for an event of blur instead of change", function() {
+          $input.validarCedulaEC({
+            events: "blur"
+          });
+          $input.val(cedulaInvalida);
+          $input.trigger("change");
+          expect($input.hasClass("invalid")).toBeFalsy;
+          $input.trigger("blur");
+          return expect($input.hasClass("invalid")).toBeTruthy;
+        });
       });
       return describe("callbacks", function() {
         var fn;

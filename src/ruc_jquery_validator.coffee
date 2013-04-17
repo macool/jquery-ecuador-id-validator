@@ -109,7 +109,7 @@
       if new RucValidatorEc(@$node.val().toString()).isValid()
         @options.onValid()
       else
-        @$node.addClass("invalid")
+        @$node.addClass @options.the_class
         @options.onInvalid()
       null
 
@@ -123,6 +123,7 @@
 
   $.fn.validarCedulaEC.defaults =
     events: "change"
+    the_classes: "invalid"
     onValid: ->
       null
     onInvalid: ->
