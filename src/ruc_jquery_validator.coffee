@@ -107,10 +107,10 @@
 
     validateContent: =>
       if new RucValidatorEc(@$node.val().toString()).isValid()
-        @options.onValid()
+        @options.onValid.call @$node
       else
         @$node.addClass @options.the_class
-        @options.onInvalid()
+        @options.onInvalid.call @$node
       null
 
       

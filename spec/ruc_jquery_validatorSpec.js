@@ -107,26 +107,45 @@
         });
       });
       return describe("callbacks", function() {
-        var fn;
+        var callback_fn, callback_fn_2;
 
-        fn = function() {
+        callback_fn = function() {
           return window.a = "macool";
+        };
+        callback_fn_2 = function() {
+          return window.last_node = this;
         };
         it("should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", function() {
           $input.validarCedulaEC({
-            onValid: fn
+            onValid: callback_fn
           });
           $input.val(cedulaValida);
           $input.trigger("change");
           return expect(window.a).toBe("macool");
         });
-        return it("should the same as last, but with an invalid CI", function() {
+        it("should the same as last, but with an invalid CI", function() {
           $input.validarCedulaEC({
-            onInvalid: fn
+            onInvalid: callback_fn
           });
           $input.val(cedulaInvalida);
           $input.trigger("change");
           return expect(window.a).toBe("macool");
+        });
+        it("should bind the jQuery object to the valid callback fn", function() {
+          $input.validarCedulaEC({
+            onValid: callback_fn_2
+          });
+          $input.val(cedulaValida);
+          $input.trigger("change");
+          return expect(window.last_node[0]).toBe($input[0]);
+        });
+        return it("should bind the jQuery object to the invalid callback fn", function() {
+          $input.validarCedulaEC({
+            onInvalid: callback_fn_2
+          });
+          $input.val(cedulaInvalida);
+          $input.trigger("change");
+          return expect(window.last_node[0]).toBe($input[0]);
         });
       });
     });

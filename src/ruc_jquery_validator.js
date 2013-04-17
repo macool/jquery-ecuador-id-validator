@@ -137,10 +137,10 @@
 
       jQueryRucValidatorEc.prototype.validateContent = function() {
         if (new RucValidatorEc(this.$node.val().toString()).isValid()) {
-          this.options.onValid();
+          this.options.onValid.call(this.$node);
         } else {
           this.$node.addClass(this.options.the_class);
-          this.options.onInvalid();
+          this.options.onInvalid.call(this.$node);
         }
         return null;
       };

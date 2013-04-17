@@ -101,18 +101,33 @@ describe "RUC jQuery Validator Plugin", ->
 
     describe "callbacks", ->
 
-      fn = ->
+      callback_fn = ->
         window.a = "macool"
 
+      callback_fn_2 = ->
+        window.last_node = this
+
       it "should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", ->
-        $input.validarCedulaEC({ onValid: fn })
+        $input.validarCedulaEC({ onValid: callback_fn })
         $input.val cedulaValida
         $input.trigger "change"
-        expect(window.a).toBe("macool")
+        expect(window.a).toBe "macool"
 
       it "should the same as last, but with an invalid CI", ->
-        $input.validarCedulaEC({ onInvalid: fn })
+        $input.validarCedulaEC({ onInvalid: callback_fn })
         $input.val cedulaInvalida
         $input.trigger "change"
-        expect(window.a).toBe("macool")
+        expect(window.a).toBe "macool"
+
+      it "should bind the jQuery object to the valid callback fn", ->
+        $input.validarCedulaEC({ onValid: callback_fn_2 })
+        $input.val cedulaValida
+        $input.trigger "change"
+        expect(window.last_node[0]).toBe $input[0]
+
+      it "should bind the jQuery object to the invalid callback fn", ->
+        $input.validarCedulaEC({ onInvalid: callback_fn_2 })
+        $input.val cedulaInvalida
+        $input.trigger "change"
+        expect(window.last_node[0]).toBe $input[0]
 
