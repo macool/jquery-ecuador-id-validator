@@ -74,36 +74,51 @@ describe "RUC jQuery Validator Plugin", ->
     it "should say it's valid when the input's CI is valid", ->
       $input.validarCedulaEC()
       $input.val(cedulaValida).trigger("change")
-      expect($input.hasClass("invalid")).toBeFalsy
+      expect($input).not.toHaveClass("invalid")
 
     it "should say it's invalid when the input's CI is invalid", ->
       $input.validarCedulaEC()
       $input.val(cedulaInvalida).trigger("change")
-      expect($input.hasClass("invalid")).toBeTruthy
+      expect($input).toHaveClass("invalid")
+
+    it "should say it's invalid when the input's CI is too short", ->
+      $input.validarCedulaEC()
+      $input.val("1234").trigger("change")
+      expect($input).toHaveClass("invalid")
+
+    it "should say it's invalid when the input's CI is 11 characters long", ->
+      $input.validarCedulaEC()
+      $input.val(cedulaValida.toString() + "1").trigger("change")
+      expect($input).toHaveClass("invalid")
+
+    it "should say it's invalid when the input's CI is 14 characters long", ->
+      $input.validarCedulaEC()
+      $input.val(cedulaValida.toString() + "0012").trigger("change")
+      expect($input).toHaveClass("invalid")
 
     describe "options", ->
 
       it "should validate always because strict is enabled by default", ->
         $input.validarCedulaEC()
         $input.val("1").trigger("change")
-        expect($input.hasClass("invalid")).toBeTruthy
+        expect($input).toHaveClass("invalid")
 
       it "should not validate because strict is disabled", ->
         $input.validarCedulaEC({ strict: false })
         $input.val("110468013").trigger("change")
-        expect($input.hasClass("invalid")).toBeFalsy
+        expect($input).not.toHaveClass("invalid")
 
       it "should add a class of no-valid if specified", ->
         $input.validarCedulaEC({ the_classes: "no-valid" })
         $input.val(cedulaInvalida).trigger("change")
-        expect($input.hasClass("no-valid")).toBeTruthy
+        expect($input).toHaveClass("no-valid")
 
       it "should listen for an event of blur instead of change", ->
         $input.validarCedulaEC({ events: "blur" })
         $input.val(cedulaInvalida).trigger("change")
-        expect($input.hasClass("invalid")).toBeFalsy
+        expect($input).not.toHaveClass("invalid")
         $input.trigger "blur"
-        expect($input.hasClass("invalid")).toBeTruthy
+        expect($input).toHaveClass("invalid")
 
     describe "callbacks", ->
       callback_return = null

@@ -77,41 +77,56 @@
       it("should say it's valid when the input's CI is valid", function() {
         $input.validarCedulaEC();
         $input.val(cedulaValida).trigger("change");
-        return expect($input.hasClass("invalid")).toBeFalsy;
+        return expect($input).not.toHaveClass("invalid");
       });
       it("should say it's invalid when the input's CI is invalid", function() {
         $input.validarCedulaEC();
         $input.val(cedulaInvalida).trigger("change");
-        return expect($input.hasClass("invalid")).toBeTruthy;
+        return expect($input).toHaveClass("invalid");
+      });
+      it("should say it's invalid when the input's CI is too short", function() {
+        $input.validarCedulaEC();
+        $input.val("1234").trigger("change");
+        return expect($input).toHaveClass("invalid");
+      });
+      it("should say it's invalid when the input's CI is 11 characters long", function() {
+        $input.validarCedulaEC();
+        $input.val(cedulaValida.toString() + "1").trigger("change");
+        return expect($input).toHaveClass("invalid");
+      });
+      it("should say it's invalid when the input's CI is 14 characters long", function() {
+        $input.validarCedulaEC();
+        $input.val(cedulaValida.toString() + "0012").trigger("change");
+        return expect($input).toHaveClass("invalid");
       });
       describe("options", function() {
         it("should validate always because strict is enabled by default", function() {
           $input.validarCedulaEC();
           $input.val("1").trigger("change");
-          return expect($input.hasClass("invalid")).toBeTruthy;
+          return expect($input).toHaveClass("invalid");
         });
         it("should not validate because strict is disabled", function() {
           $input.validarCedulaEC({
             strict: false
           });
           $input.val("110468013").trigger("change");
-          return expect($input.hasClass("invalid")).toBeFalsy;
+          return expect($input).not.toHaveClass("invalid");
         });
         it("should add a class of no-valid if specified", function() {
           $input.validarCedulaEC({
             the_classes: "no-valid"
           });
           $input.val(cedulaInvalida).trigger("change");
-          return expect($input.hasClass("no-valid")).toBeTruthy;
+          return expect($input).toHaveClass("no-valid");
         });
         return it("should listen for an event of blur instead of change", function() {
           $input.validarCedulaEC({
             events: "blur"
           });
           $input.val(cedulaInvalida).trigger("change");
-          expect($input.hasClass("invalid")).toBeFalsy;
+          expect($input).not.toHaveClass("invalid");
           $input.trigger("blur");
-          return expect($input.hasClass("invalid")).toBeTruthy;
+          return expect($input).toHaveClass("invalid");
         });
       });
       return describe("callbacks", function() {

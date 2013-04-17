@@ -11,6 +11,7 @@
     validate: ->
       unless @numero.length is 10 or @numero.length is 13
         @valid = false
+        throw new Error("Longitud incorrecta.")
 
       # código de provincia:
       provincias = 22
@@ -70,28 +71,19 @@
       if tercer_digito is 6
         if @numero.substr(9,4) isnt "0001"
           throw new Error("RUC de empresa del sector público debe terminar en 0001")
-        if digito_verificador is verificador
-          @valid = true
-        else
-          @valid = false
+        @valid = digito_verificador is verificador
 
       # entidades privadas:
       if tercer_digito is 9
         if @numero.substr(10,3) isnt "001"
           throw new Error("RUC de entidad privada debe terminar en 001")
-        if digito_verificador is verificador
-          @valid = true
-        else
-          @valid = false
+        @valid = digito_verificador is verificador
 
       # personas naturales:
       if tercer_digito < 6
         if @numero.length > 10 and @numero.substr(10,3) isnt "001"
           throw new Error("RUC de persona natural debe terminar en 001")
-        if digito_verificador is verificador
-          @valid = true
-        else
-          @valid = false
+        @valid = digito_verificador is verificador
       this
 
     isValid: ->
@@ -111,10 +103,14 @@
       if not check and (numero_de_cedula.length is 10 or numero_de_cedula.length is 13)
         check = true
       if check
-        if new RucValidatorEc(numero_de_cedula).isValid()
-          @$node.removeClass @options.the_classes
-          @options.onValid.call @$node
-        else
+        try
+          if new RucValidatorEc(numero_de_cedula).isValid()
+            @$node.removeClass @options.the_classes
+            @options.onValid.call @$node
+          else
+            @$node.addClass @options.the_classes
+            @options.onInvalid.call @$node
+        catch error
           @$node.addClass @options.the_classes
           @options.onInvalid.call @$node
       null
