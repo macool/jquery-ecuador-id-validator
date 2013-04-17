@@ -139,16 +139,18 @@
         var check, numero_de_cedula;
 
         numero_de_cedula = this.$node.val().toString();
-        check = !this.options.strict;
-        if (this.options.strict && numero_de_cedula.length === 10 || numero_de_cedula.length === 13) {
+        check = this.options.strict;
+        if (!check && (numero_de_cedula.length === 10 || numero_de_cedula.length === 13)) {
           check = true;
         }
-        if (check && new RucValidatorEc(numero_de_cedula).isValid()) {
-          this.$node.removeClass(this.options.the_classes);
-          this.options.onValid.call(this.$node);
-        } else {
-          this.$node.addClass(this.options.the_classes);
-          this.options.onInvalid.call(this.$node);
+        if (check) {
+          if (new RucValidatorEc(numero_de_cedula).isValid()) {
+            this.$node.removeClass(this.options.the_classes);
+            this.options.onValid.call(this.$node);
+          } else {
+            this.$node.addClass(this.options.the_classes);
+            this.options.onInvalid.call(this.$node);
+          }
         }
         return null;
       };
