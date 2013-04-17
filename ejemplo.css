@@ -1,0 +1,28 @@
+html {
+  text-align: center;
+  font-family: Georgia;
+}
+
+body {
+  padding: 1em;
+  text-align: left;
+  display: inline-block;
+  width: 500px;
+}
+
+.division {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em 0;
+}
+
+.invalid {
+  color: red;
+}
+
+.color_blue {
+  color: blue;
+}
+
+code {
+  white-space: pre-wrap;
+}

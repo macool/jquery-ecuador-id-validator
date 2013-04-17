@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <title>ruc_jquery_validator.js</title>
+  <meta charset="utf-8" />
+  <!-- jquery --><script type="text/javascript" src="lib/jquery-1.9.1/jquery-1.9.1.js"></script>
+  <!-- validator --><script type="text/javascript" src="src/ruc_jquery_validator.js"></script>
+  <link rel="stylesheet" type="text/css" href="ejemplo.css">
+</head>
+<body>
+
+  <h1>ruc_jquery_validator.js</h1>
+
+  <div>
+    <h2>uso básico</h2>
+    <label for="cedula_1">cédula:</label>
+    <input type="text" id="cedula_1" name="cedula_1">
+
+    <code>
+$("#cedula_1").validarCedulaEC();
+    </code>
+
+    <script type="text/javascript">
+      $("#cedula_1").validarCedulaEC();
+    </script>
+  </div>
+
+  <div class="division"></div>
+
+  <div>
+    <h2>con opciones</h2>
+    <label for="cedula_2">cédula:</label>
+    <input type="text" id="cedula_2" name="cedula_2">
+
+    <code>
+$("#cedula_2").validarCedulaEC({ 
+  the_classes: "color_blue",
+  events: "blur"
+});
+    </code>
+
+    <script type="text/javascript">
+      $("#cedula_2").validarCedulaEC({
+        the_classes: "color_blue",
+        events: "blur"
+      });
+    </script>
+  </div>
+
+  <div class="division"></div>
+
+  <div>
+    <h2>con callbacks</h2>
+    <label for="cedula_3">cédula:</label>
+    <input type="text" id="cedula_3" name="cedula_3">
+
+    <code>
+$("#cedula_3").validarCedulaEC({
+  onValid: function () {
+    window.alert("cédula válida.");
+  },
+  onInvalid: function () {
+    window.alert("cédula inválida.");
+  }
+});
+    </code>
+
+    <script type="text/javascript">
+      $("#cedula_3").validarCedulaEC({
+        onValid: function () {
+          window.alert("cédula válida.");
+        },
+        onInvalid: function () {
+          window.alert("cédula inválida.");
+        }
+      });
+    </script>
+
+  </div>
+
+</body>
+</html>
