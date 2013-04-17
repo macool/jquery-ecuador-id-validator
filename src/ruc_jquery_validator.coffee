@@ -98,7 +98,7 @@
       @validate() unless @already_validated
       @valid
 
-  window.RucValidatorEc = RucValidatorEc     # only for testing
+  # window.RucValidatorEc = RucValidatorEc     # uncomment only for testing
 
   class jQueryRucValidatorEc
     constructor: ( @$node, @options ) ->

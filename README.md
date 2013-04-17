@@ -38,3 +38,5 @@ $("input").validarCedulaEC(opciones);
 ## Contribuir
 
 He utilizado [jasmine](https://github.com/pivotal/jasmine) para el testing, y está escrito en [coffeescript](http://coffeescript.org/). (No soy un experto en esto).
+
+Descomentar la línea `101` del spec (coffeescript) para testing.

@@ -125,7 +125,6 @@
       return RucValidatorEc;
 
     })();
-    window.RucValidatorEc = RucValidatorEc;
     jQueryRucValidatorEc = (function() {
       function jQueryRucValidatorEc($node, options) {
         this.$node = $node;
