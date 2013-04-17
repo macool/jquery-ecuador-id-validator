@@ -14,7 +14,7 @@ describe "RUC jQuery Validator Plugin", ->
   cedulaInvalida = 1104680134
 
   describe "Class methods", ->
-    
+
     it "should say province code is invalid", ->
       expect ->
         new RucValidatorEc("2304680135").isValid()
@@ -71,42 +71,36 @@ describe "RUC jQuery Validator Plugin", ->
     beforeEach ->
       $input = $("<input />", {type: "text"})
 
-    it "should fill the input node with a valid CI number and say it's valid", ->
+    it "should say it's valid when the input's CI is valid", ->
       $input.validarCedulaEC()
-      $input.val cedulaValida
-      $input.trigger "change"
+      $input.val(cedulaValida).trigger("change")
       expect($input.hasClass("invalid")).toBeFalsy
 
-    it "should fill the input node with an invalid CI number and say it's invalid", ->
+    it "should say it's invalid when the input's CI is invalid", ->
       $input.validarCedulaEC()
-      $input.val cedulaInvalida
-      $input.trigger "change"
+      $input.val(cedulaInvalida).trigger("change")
       expect($input.hasClass("invalid")).toBeTruthy
 
     describe "options", ->
 
       it "should validate always because strict is enabled by default", ->
         $input.validarCedulaEC()
-        $input.val "1"
-        $input.trigger "change"
+        $input.val("1").trigger("change")
         expect($input.hasClass("invalid")).toBeTruthy
 
       it "should not validate because strict is disabled", ->
         $input.validarCedulaEC({ strict: false })
-        $input.val "110468013"
-        $input.trigger "change"
+        $input.val("110468013").trigger("change")
         expect($input.hasClass("invalid")).toBeFalsy
 
       it "should add a class of no-valid if specified", ->
         $input.validarCedulaEC({ the_classes: "no-valid" })
-        $input.val cedulaInvalida
-        $input.trigger "change"
+        $input.val(cedulaInvalida).trigger("change")
         expect($input.hasClass("no-valid")).toBeTruthy
 
       it "should listen for an event of blur instead of change", ->
         $input.validarCedulaEC({ events: "blur" })
-        $input.val cedulaInvalida
-        $input.trigger "change"
+        $input.val(cedulaInvalida).trigger("change")
         expect($input.hasClass("invalid")).toBeFalsy
         $input.trigger "blur"
         expect($input.hasClass("invalid")).toBeTruthy
@@ -121,25 +115,21 @@ describe "RUC jQuery Validator Plugin", ->
 
       it "should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", ->
         $input.validarCedulaEC({ onValid: callback_fn })
-        $input.val cedulaValida
-        $input.trigger "change"
+        $input.val(cedulaValida).trigger("change")
         expect(window.a).toBe "macool"
 
       it "should the same as last, but with an invalid CI", ->
         $input.validarCedulaEC({ onInvalid: callback_fn })
-        $input.val cedulaInvalida
-        $input.trigger "change"
+        $input.val(cedulaInvalida).trigger("change")
         expect(window.a).toBe "macool"
 
       it "should bind the jQuery object to the valid callback fn", ->
         $input.validarCedulaEC({ onValid: callback_fn_2 })
-        $input.val cedulaValida
-        $input.trigger "change"
+        $input.val(cedulaValida).trigger("change")
         expect(window.last_node[0]).toBe $input[0]
 
       it "should bind the jQuery object to the invalid callback fn", ->
         $input.validarCedulaEC({ onInvalid: callback_fn_2 })
-        $input.val cedulaInvalida
-        $input.trigger "change"
+        $input.val(cedulaInvalida).trigger("change")
         expect(window.last_node[0]).toBe $input[0]
 

@@ -74,47 +74,41 @@
           type: "text"
         });
       });
-      it("should fill the input node with a valid CI number and say it's valid", function() {
+      it("should say it's valid when the input's CI is valid", function() {
         $input.validarCedulaEC();
-        $input.val(cedulaValida);
-        $input.trigger("change");
+        $input.val(cedulaValida).trigger("change");
         return expect($input.hasClass("invalid")).toBeFalsy;
       });
-      it("should fill the input node with an invalid CI number and say it's invalid", function() {
+      it("should say it's invalid when the input's CI is invalid", function() {
         $input.validarCedulaEC();
-        $input.val(cedulaInvalida);
-        $input.trigger("change");
+        $input.val(cedulaInvalida).trigger("change");
         return expect($input.hasClass("invalid")).toBeTruthy;
       });
       describe("options", function() {
         it("should validate always because strict is enabled by default", function() {
           $input.validarCedulaEC();
-          $input.val("1");
-          $input.trigger("change");
+          $input.val("1").trigger("change");
           return expect($input.hasClass("invalid")).toBeTruthy;
         });
         it("should not validate because strict is disabled", function() {
           $input.validarCedulaEC({
             strict: false
           });
-          $input.val("110468013");
-          $input.trigger("change");
+          $input.val("110468013").trigger("change");
           return expect($input.hasClass("invalid")).toBeFalsy;
         });
         it("should add a class of no-valid if specified", function() {
           $input.validarCedulaEC({
             the_classes: "no-valid"
           });
-          $input.val(cedulaInvalida);
-          $input.trigger("change");
+          $input.val(cedulaInvalida).trigger("change");
           return expect($input.hasClass("no-valid")).toBeTruthy;
         });
         return it("should listen for an event of blur instead of change", function() {
           $input.validarCedulaEC({
             events: "blur"
           });
-          $input.val(cedulaInvalida);
-          $input.trigger("change");
+          $input.val(cedulaInvalida).trigger("change");
           expect($input.hasClass("invalid")).toBeFalsy;
           $input.trigger("blur");
           return expect($input.hasClass("invalid")).toBeTruthy;
@@ -133,32 +127,28 @@
           $input.validarCedulaEC({
             onValid: callback_fn
           });
-          $input.val(cedulaValida);
-          $input.trigger("change");
+          $input.val(cedulaValida).trigger("change");
           return expect(window.a).toBe("macool");
         });
         it("should the same as last, but with an invalid CI", function() {
           $input.validarCedulaEC({
             onInvalid: callback_fn
           });
-          $input.val(cedulaInvalida);
-          $input.trigger("change");
+          $input.val(cedulaInvalida).trigger("change");
           return expect(window.a).toBe("macool");
         });
         it("should bind the jQuery object to the valid callback fn", function() {
           $input.validarCedulaEC({
             onValid: callback_fn_2
           });
-          $input.val(cedulaValida);
-          $input.trigger("change");
+          $input.val(cedulaValida).trigger("change");
           return expect(window.last_node[0]).toBe($input[0]);
         });
         return it("should bind the jQuery object to the invalid callback fn", function() {
           $input.validarCedulaEC({
             onInvalid: callback_fn_2
           });
-          $input.val(cedulaInvalida);
-          $input.trigger("change");
+          $input.val(cedulaInvalida).trigger("change");
           return expect(window.last_node[0]).toBe($input[0]);
         });
       });
