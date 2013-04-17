@@ -78,9 +78,11 @@ $("#cedula_4").validarCedulaEC({
 $("#cedula_3").validarCedulaEC({
   onValid: function () {
     window.alert("cédula válida.");
+    console.log(this);
   },
   onInvalid: function () {
     window.alert("cédula inválida.");
+    console.log(this);
   }
 });
     </code>
@@ -88,9 +90,11 @@ $("#cedula_3").validarCedulaEC({
     <script type="text/javascript">
       $("#cedula_3").validarCedulaEC({
         onValid: function () {
+          console.log(this);
           window.alert("cédula válida.");
         },
         onInvalid: function () {
+          console.log(this);
           window.alert("cédula inválida.");
         }
       });
