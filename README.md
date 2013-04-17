@@ -26,7 +26,7 @@ $("input").validarCedulaEC();
 ```javascript
 var opciones = {
   events: "change",          // evento que va a disparar la validación
-  the_classes: "invalid",
+  the_classes: "invalid",    // clase que se va a agregar al nodo en el que se realiza la validación
   onValid: function () {},   // callback cuando la cédula es correcta.
   onInvalid: function () {}  // callback cuando la cédula es incorrecta.
 };
