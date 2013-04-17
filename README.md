@@ -25,6 +25,7 @@ $("input").validarCedulaEC();
 
 ```javascript
 var opciones = {
+  strict: true,              // va a validar siempre, aunque la cantidad de caracteres no sea 10 ni 13
   events: "change",          // evento que va a disparar la validación
   the_classes: "invalid",    // clase que se va a agregar al nodo en el que se realiza la validación
   onValid: function () {},   // callback cuando la cédula es correcta.
