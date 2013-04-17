@@ -106,7 +106,11 @@
       @$node.on @options.events, @validateContent
 
     validateContent: =>
-      if new RucValidatorEc(@$node.val().toString()).isValid()
+      numero_de_cedula = @$node.val().toString()
+      check = not @options.strict
+      if @options.strict and numero_de_cedula.length is 10 or numero_de_cedula.length is 13
+        check = true
+      if check and new RucValidatorEc(numero_de_cedula).isValid()
         @$node.removeClass @options.the_classes
         @options.onValid.call @$node
       else
@@ -123,6 +127,7 @@
     this
 
   $.fn.validarCedulaEC.defaults =
+    strict: true
     events: "change"
     the_classes: "invalid"
     onValid: ->

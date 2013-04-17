@@ -136,7 +136,14 @@
       }
 
       jQueryRucValidatorEc.prototype.validateContent = function() {
-        if (new RucValidatorEc(this.$node.val().toString()).isValid()) {
+        var check, numero_de_cedula;
+
+        numero_de_cedula = this.$node.val().toString();
+        check = !this.options.strict;
+        if (this.options.strict && numero_de_cedula.length === 10 || numero_de_cedula.length === 13) {
+          check = true;
+        }
+        if (check && new RucValidatorEc(numero_de_cedula).isValid()) {
           this.$node.removeClass(this.options.the_classes);
           this.options.onValid.call(this.$node);
         } else {
@@ -156,6 +163,7 @@
       return this;
     };
     return $.fn.validarCedulaEC.defaults = {
+      strict: true,
       events: "change",
       the_classes: "invalid",
       onValid: function() {

@@ -87,6 +87,20 @@
         return expect($input.hasClass("invalid")).toBeTruthy;
       });
       describe("options", function() {
+        it("should validate always because strict is enabled by default", function() {
+          $input.validarCedulaEC();
+          $input.val("1");
+          $input.trigger("change");
+          return expect($input.hasClass("invalid")).toBeTruthy;
+        });
+        it("should not validate because strict is disabled", function() {
+          $input.validarCedulaEC({
+            strict: false
+          });
+          $input.val("110468013");
+          $input.trigger("change");
+          return expect($input.hasClass("invalid")).toBeFalsy;
+        });
         it("should add a class of no-valid if specified", function() {
           $input.validarCedulaEC({
             the_classes: "no-valid"

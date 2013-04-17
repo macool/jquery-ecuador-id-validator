@@ -85,6 +85,18 @@ describe "RUC jQuery Validator Plugin", ->
 
     describe "options", ->
 
+      it "should validate always because strict is enabled by default", ->
+        $input.validarCedulaEC()
+        $input.val "1"
+        $input.trigger "change"
+        expect($input.hasClass("invalid")).toBeTruthy
+
+      it "should not validate because strict is disabled", ->
+        $input.validarCedulaEC({ strict: false })
+        $input.val "110468013"
+        $input.trigger "change"
+        expect($input.hasClass("invalid")).toBeFalsy
+
       it "should add a class of no-valid if specified", ->
         $input.validarCedulaEC({ the_classes: "no-valid" })
         $input.val cedulaInvalida
