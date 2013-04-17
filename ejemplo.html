@@ -50,6 +50,26 @@ $("#cedula_2").validarCedulaEC({
   <div class="division"></div>
 
   <div>
+    <h2>no validar a menos que hayan 10 o 13 caracteres</h2>
+    <label for="cedula_4">cédula:</label>
+    <input type="text" id="cedula_4" name="cedula_4">
+
+    <code>
+$("#cedula_4").validarCedulaEC({
+  strict: false
+});
+    </code>
+
+    <script type="text/javascript">
+      $("#cedula_4").validarCedulaEC({
+        strict: false
+      });
+    </script>
+  </div>
+
+  <div class="division"></div>
+
+  <div>
     <h2>con callbacks</h2>
     <label for="cedula_3">cédula:</label>
     <input type="text" id="cedula_3" name="cedula_3">
