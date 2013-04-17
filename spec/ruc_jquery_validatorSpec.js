@@ -115,41 +115,42 @@
         });
       });
       return describe("callbacks", function() {
-        var callback_fn, callback_fn_2;
+        var callback_return;
 
-        callback_fn = function() {
-          return window.a = "macool";
-        };
-        callback_fn_2 = function() {
-          return window.last_node = this;
-        };
-        it("should callback for an anonymous function when CI is valid that asigns a value a to window equals to 'macool'", function() {
+        callback_return = null;
+        beforeEach(function() {
+          this.callback_fn = function() {
+            return callback_return = this;
+          };
+          return spyOn(this, "callback_fn").andCallThrough();
+        });
+        it("should fire a callback when CI is valid", function() {
           $input.validarCedulaEC({
-            onValid: callback_fn
+            onValid: this.callback_fn
           });
           $input.val(cedulaValida).trigger("change");
-          return expect(window.a).toBe("macool");
+          return expect(this.callback_fn).toHaveBeenCalled;
         });
-        it("should the same as last, but with an invalid CI", function() {
+        it("should fire a callback when CI is invalid", function() {
           $input.validarCedulaEC({
-            onInvalid: callback_fn
+            onInvalid: this.callback_fn
           });
           $input.val(cedulaInvalida).trigger("change");
-          return expect(window.a).toBe("macool");
+          return expect(this.callback_fn).toHaveBeenCalled;
         });
         it("should bind the jQuery object to the valid callback fn", function() {
           $input.validarCedulaEC({
-            onValid: callback_fn_2
+            onValid: this.callback_fn
           });
           $input.val(cedulaValida).trigger("change");
-          return expect(window.last_node[0]).toBe($input[0]);
+          return expect(callback_return[0]).toBe($input[0]);
         });
         return it("should bind the jQuery object to the invalid callback fn", function() {
           $input.validarCedulaEC({
-            onInvalid: callback_fn_2
+            onInvalid: this.callback_fn
           });
           $input.val(cedulaInvalida).trigger("change");
-          return expect(window.last_node[0]).toBe($input[0]);
+          return expect(callback_return[0]).toBe($input[0]);
         });
       });
     });
