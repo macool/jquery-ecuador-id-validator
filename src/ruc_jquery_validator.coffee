@@ -9,7 +9,7 @@
       @already_validated = false
 
     validate: ->
-      unless @numero.length is 10 or @numero.length is 13
+      unless @numero.length in [10, 13]
         @valid = false
         throw new Error("Longitud incorrecta.")
 
@@ -25,9 +25,10 @@
       #     6    -> sociedades publicas
       #     0..6 -> personas naturales
       tercer_digito = parseInt(@numero[2], 10)
-      if tercer_digito is 7 or tercer_digito is 8
+      if tercer_digito in [7, 8]
         throw new Error("Tercer dígito es inválido.")
-      if tercer_digito is 9 then @tipo_de_cedula = "Sociedad privada o extranjera"
+      if tercer_digito is 9
+        @tipo_de_cedula = "Sociedad privada o extranjera"
       else if tercer_digito is 6 then @tipo_de_cedula = "Sociedad pública"
       else if tercer_digito < 6 then @tipo_de_cedula = "Persona natural"
 
@@ -70,7 +71,8 @@
       # sociedades públicas:
       if tercer_digito is 6
         if @numero.substr(9,4) isnt "0001"
-          throw new Error("RUC de empresa del sector público debe terminar en 0001")
+          throw new Error(
+            "RUC de empresa del sector público debe terminar en 0001")
         @valid = digito_verificador is verificador
 
       # entidades privadas:
@@ -100,7 +102,7 @@
     validateContent: =>
       numero_de_cedula = @$node.val().toString()
       check = @options.strict
-      if not check and (numero_de_cedula.length is 10 or numero_de_cedula.length is 13)
+      if not check and (numero_de_cedula.length in [10, 13])
         check = true
       if check
         try
