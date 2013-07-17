@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "plugin para jQuery para validar la cédula o RUC de Ecuador.",
   "readmeFilename": "README.md",
-  "author": "Mario Andrés Correa <admin@macool.me>",
-  "license": "-",
+  "author": "Mario Andrés Correa <a@macool.me>",
+  "license": "beer-ware license",
   "contributors": [
     "Jonathan Reyes <j@jreyes.org>"
   ],
