@@ -4,6 +4,8 @@ plugin para jQuery para validar la cédula o RUC de Ecuador.
 
 ****
 
+[![Build Status](https://travis-ci.org/macool/cedula-ruc-ecuador-validator-jquery.png?branch=master)](https://travis-ci.org/macool/cedula-ruc-ecuador-validator-jquery)
+
 ## Cómo usar
 
 1. jQuery `<script src='jquery.js'></script>`
