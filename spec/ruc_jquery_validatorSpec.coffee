@@ -1,20 +1,18 @@
 describe "load dependences", ->
-
   it "should have already loaded jQuery 1.9.1 in $", ->
     expect($.fn.jquery).toEqual "1.9.1"
 
   it "should have loaded validarCedulaEC in $.fn", ->
     expect($.fn.validarCedulaEC).toBeDefined()
 
-
-
 describe "RUC jQuery Validator Plugin", ->
-
   cedulaValida = 1104680135
   cedulaInvalida = 1104680134
 
-  describe "Class methods", ->
+  beforeEach ->
+    window.RucValidatorEc = $.fn.validarCedulaEC.RucValidatorEc
 
+  describe "Class methods", ->
     it "should say province code is invalid", ->
       expect ->
         new RucValidatorEc("2304680135").isValid()
@@ -32,7 +30,6 @@ describe "RUC jQuery Validator Plugin", ->
       .toThrow("Tercer dígito es inválido.")
 
     describe "tipo de cédula", ->
-
       it "should say its Persona natural", ->
         expect(new RucValidatorEc("1104680135").validate().tipo_de_cedula)
           .toBe("Persona natural")
@@ -46,7 +43,6 @@ describe "RUC jQuery Validator Plugin", ->
           .toBe("Sociedad privada o extranjera")
 
     describe "con cédulas", ->
-
       it "should say cedula is valid", ->
         expect(new RucValidatorEc(cedulaValida).validate().isValid())
           .toBeTruthy
@@ -70,7 +66,6 @@ describe "RUC jQuery Validator Plugin", ->
 
 
   describe "DOM behavior", ->
-
     $input = null
 
     beforeEach ->
@@ -102,7 +97,6 @@ describe "RUC jQuery Validator Plugin", ->
       expect($input).toHaveClass("invalid")
 
     describe "options", ->
-
       it "should validate always because strict is enabled by default", ->
         $input.validarCedulaEC()
         $input.val("1").trigger("change")

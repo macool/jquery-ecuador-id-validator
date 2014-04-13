@@ -92,8 +92,6 @@
       @validate() unless @already_validated
       @valid
 
-  window.RucValidatorEc = RucValidatorEc     # uncomment only for testing
-
   class jQueryRucValidatorEc
     constructor: ( @$node, @options ) ->
       @options = $.extend({}, $.fn.validarCedulaEC.defaults, @options)
@@ -117,13 +115,12 @@
           @options.onInvalid.call @$node
       null
 
-
-
-
   $.fn.validarCedulaEC = ( options ) ->
     this.each ->
       new jQueryRucValidatorEc( $(this), options )
     this
+
+  $.fn.validarCedulaEC.RucValidatorEc = RucValidatorEc
 
   $.fn.validarCedulaEC.defaults =
     strict: true
@@ -133,7 +130,5 @@
       null
     onInvalid: ->
       null
-
-
 
 )(jQuery)

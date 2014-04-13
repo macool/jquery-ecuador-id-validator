@@ -3,7 +3,6 @@
 
   (function($) {
     var RucValidatorEc, jQueryRucValidatorEc;
-
     RucValidatorEc = (function() {
       function RucValidatorEc(numero) {
         this.numero = numero;
@@ -16,7 +15,6 @@
 
       RucValidatorEc.prototype.validate = function() {
         var digito_verificador, i, modulo, multiplicadores, p, producto, productos, provincias, residuo, suma, tercer_digito, verificador, _i, _j, _k, _l, _len, _len1, _ref, _ref1;
-
         if ((_ref = this.numero.length) !== 10 && _ref !== 13) {
           this.valid = false;
           throw new Error("Longitud incorrecta.");
@@ -113,7 +111,6 @@
       return RucValidatorEc;
 
     })();
-    window.RucValidatorEc = RucValidatorEc;
     jQueryRucValidatorEc = (function() {
       function jQueryRucValidatorEc($node, options) {
         this.$node = $node;
@@ -125,7 +122,6 @@
 
       jQueryRucValidatorEc.prototype.validateContent = function() {
         var check, error, numero_de_cedula, _ref;
-
         numero_de_cedula = this.$node.val().toString();
         check = this.options.strict;
         if (!check && ((_ref = numero_de_cedula.length) === 10 || _ref === 13)) {
@@ -158,6 +154,7 @@
       });
       return this;
     };
+    $.fn.validarCedulaEC.RucValidatorEc = RucValidatorEc;
     return $.fn.validarCedulaEC.defaults = {
       strict: true,
       events: "change",

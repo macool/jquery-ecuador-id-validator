@@ -10,9 +10,11 @@
 
   describe("RUC jQuery Validator Plugin", function() {
     var cedulaInvalida, cedulaValida;
-
     cedulaValida = 1104680135;
     cedulaInvalida = 1104680134;
+    beforeEach(function() {
+      return window.RucValidatorEc = $.fn.validarCedulaEC.RucValidatorEc;
+    });
     describe("Class methods", function() {
       it("should say province code is invalid", function() {
         expect(function() {
@@ -53,7 +55,6 @@
         });
         return it("testing some friend's CIs", function() {
           var ci, validCIs, _i, _len, _results;
-
           validCIs = ["1104077209", "1102077425", "1102019351"];
           _results = [];
           for (_i = 0, _len = validCIs.length; _i < _len; _i++) {
@@ -66,7 +67,6 @@
     });
     return describe("DOM behavior", function() {
       var $input;
-
       $input = null;
       beforeEach(function() {
         return $input = $("<input />", {
@@ -130,7 +130,6 @@
       });
       return describe("callbacks", function() {
         var callback_return;
-
         callback_return = null;
         beforeEach(function() {
           this.callback_fn = function() {
