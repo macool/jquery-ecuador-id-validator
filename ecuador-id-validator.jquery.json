@@ -1,0 +1,29 @@
+{
+  "name": "ecuador-id-validator",
+  "version": "0.0.1",
+  "title": "Ecuador ID validator",
+  "description": "plugin jQuery para validar cédula o RUC de Ecuador.",
+  "homepage": "http://macool.github.io/jquery-ecuador-id-validator/",
+  "docs": "https://github.com/macool/jquery-ecuador-id-validator",
+  "bugs": "https://github.com/macool/jquery-ecuador-id-validator/issues",
+  "author": {
+    "name": "Mario Andrés Correa",
+    "email": "a@macool.me",
+    "url": "http://macool.me"
+  },
+  "licenses": [
+    {
+      "type": "beerware",
+      "url": "https://github.com/macool/jquery-ecuador-id-validator/blob/master/license"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=1.9.1"
+  },
+  "keywords": [
+    "ecuador",
+    "id",
+    "cedula",
+    "ruc"
+  ]
+}

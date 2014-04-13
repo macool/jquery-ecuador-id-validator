@@ -47,8 +47,9 @@ module.exports = function(grunt) {
           '/**\n' +
           ' * <%= pkg.name %>\n' +
           ' * @author <%= pkg.author %>\n' +
-          ' * @license <%= pkg.license %>\n' +
+          ' * @license <%= pkg.license %> <%= pkg.licenseURL %>\n' +
           ' * @version <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
+          ' * @homepage <%= pkg.homepage %>\n' +
           ' */\n'
       },
       dist: {
