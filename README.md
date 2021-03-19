@@ -2,6 +2,10 @@
 
 plugin para jQuery para validar la cédula o RUC de Ecuador.
 
+## :warning:
+
+This library has not been actively maintained for a while. Pull requests are welcome however.
+
 ****
 
 [![Build Status](https://travis-ci.org/macool/jquery-ecuador-id-validator.png?branch=master)](https://travis-ci.org/macool/jquery-ecuador-id-validator)
